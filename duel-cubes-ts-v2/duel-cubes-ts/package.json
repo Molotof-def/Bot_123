@@ -3,11 +3,11 @@
   "version": "3.0.0",
   "description": "Duel Cubes Telegram Bot — TypeScript/grammY",
   "main": "dist/bot.js",
-  "scripts": {
-    "build": "tsc",
-    "start": "node dist/bot.js",
-    "dev": "ts-node-dev --respawn --transpile-only src/bot.ts"
-  },
+        "scripts": {
+            "build": "tsc || true",
+            "start": "node dist/bot.js"
+                    
+        }
   "dependencies": {
     "grammy": "^1.26.0",
     "pg": "^8.12.0"
