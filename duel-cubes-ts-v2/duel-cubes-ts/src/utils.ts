@@ -73,12 +73,10 @@ export function fmtDate(d: Date): string {
 }
 
 /** Sleep helper */
-export const sleep = (ms: number) =>
-  new Promise<void>((r) => setTimeout(r, ms));
-export async function addBalance(userId: number, amount: number) {
-  // Вызывает метод начисления баланса из твоего db
-  import { pool } from "./db.js";
+/** Sleep helper */
+export const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
 
-  export async function addBalance(userId: number, amount: number) {
-    await pool.query("UPDATE users SET balance = balance + $1 WHERE user_id = $2", [amount, userId]);
-  }
+export async function addBalance(userId: number, amount: number) {
+  const { pool } = await import("./db.js");
+  await pool.query("UPDATE users SET balance = balance + $1 WHERE user_id = $2", [amount, userId]);
+}
