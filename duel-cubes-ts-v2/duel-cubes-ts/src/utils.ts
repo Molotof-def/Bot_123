@@ -75,3 +75,7 @@ export function fmtDate(d: Date): string {
 /** Sleep helper */
 export const sleep = (ms: number) =>
   new Promise<void>((r) => setTimeout(r, ms));
+export async function addBalance(userId: number, amount: number) {
+  // Вызывает метод начисления баланса из твоего db
+  return await db.changeBalance(userId, amount);
+}

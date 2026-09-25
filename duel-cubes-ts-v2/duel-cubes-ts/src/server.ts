@@ -1,4 +1,4 @@
-import http from "node:http";
+import * as http from "http";
 import { config } from "./config.js";
 
 export function startHttpServer(): void {
