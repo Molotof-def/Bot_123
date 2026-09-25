@@ -21,26 +21,58 @@ import { registerBusinessHandlers } from "./handlers/businesses.js";
 import { registerSupportHandlers } from "./handlers/support.js";
 
 async function main(): Promise<void> {
-  // 1. HTTP keepalive — must bind before anything else to pass Render port scan
+  // 1. HTTP keep-alive сервер
   startHttpServer();
 
-  // 2. DB schema + safe migrations
+  // 2. Инициализация схемы базы данных
+  console.log("Запускаю initSchema()...");
   await initSchema();
+  console.log("initSchema() успешно завершена!");
 
-  // 3. Bot
+  // 3. Создание инстанса бота
   const bot = new Bot<BotContext>(config.BOT_TOKEN);
 
-  // 4. Session (in-memory, per chat+user)
-  bot.use(session({
-    initial: (): SessionData => ({
-      ladderStep: null,
-      ladderBet: null,
-      ladderLastActivity: null,
-    }),
-    getSessionKey: (ctx) =>
-      ctx.chat && ctx.from ? `${ctx.chat.id}_${ctx.from.id}` : undefined,
-  }));
+  // 4. Сессии и базовые мидлвари
+  bot.use(
+    session({
+      initial: (): SessionData => ({})
+    })
+  );
 
+  // 5. Регистрация ВСЕХ модулей
+  console.log("Регистрирую хэндлеры...");
+  registerBalanceHandlers(bot);
+  registerWorkHandlers(bot);
+  registerGameHandlers(bot);
+  registerDuelHandlers(bot);
+  registerSocialHandlers(bot);
+  registerClanHandlers(bot);
+  registerCheckHandlers(bot);
+  registerRpHandlers(bot);
+  registerQuizHandlers(bot);
+  registerTopHandlers(bot);
+  registerAdminHandlers(bot);
+  registerCaptchaHandlers(bot);
+  registerBusinessHandlers(bot);
+  registerSupportHandlers(bot);
+  console.log("Все хэндлеры успешно зарегистрированы!");
+
+  // 6. Очистка старых вебхуков и запуск Long Polling
+  console.log("Сбрасываю старый webhook...");
+  await bot.api.deleteWebhook({ drop_pending_updates: true });
+
+  console.log("Запускаю bot.start()...");
+  await bot.start({
+    onStart: (botInfo) => {
+      console.log(`🚀 [Bot] @${botInfo.username} УСПЕШНО ЗАПУЩЕН И ОТВЕЧАЕТ!`);
+    }
+  });
+}
+
+// ОБЯЗАТЕЛЬНО: запуск с выводом точной ошибки, если что-то сломалось
+main().catch((err) => {
+  console.error("❌ ФАТАЛЬНАЯ ОШИБКА ПРИ СТАРТЕ БОТА:", err);
+});
   // 5. Global middleware — user upsert + message count + bot_enabled gate
   bot.use(async (ctx, next) => {
     try {
