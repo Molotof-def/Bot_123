@@ -1,19 +1,20 @@
 {
-    "compilerOptions": {
-        "target": "ES2022",
-        "module": "NodeNext",
-        "moduleResolution": "NodeNext",
-        "outDir": "dist",
-        "rootDir": "src",
-        "strict": true,
-        "esModuleInterop": true,
-        "skipLibCheck": true,
-        "resolveJsonModule": true,
-        "forceConsistentCasingInFileNames": true,
-        "sourceMap": true,
-        "noEmitOnError": false,
-        "skipLibCheck": true
+    "name": "duel-cubes-bot",
+    "version": "1.0.0",
+    "type": "module",
+    "scripts": {
+        "build": "tsc || true",
+        "start": "npx tsx src/bot.ts"
     },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"]
+    "dependencies": {
+        "dotenv": "^16.4.5",
+        "grammy": "^1.21.1",
+        "pg": "^8.11.3"
+    },
+    "devDependencies": {
+        "@types/node": "^20.11.24",
+        "@types/pg": "^8.11.2",
+        "tsx": "^4.7.1",
+        "typescript": "^5.3.3"
+    }
 }
