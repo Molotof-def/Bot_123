@@ -129,7 +129,7 @@ main().catch((err) => {
     allowed_updates: ["message", "callback_query", "chat_member", "my_chat_member"],
     onStart: (info) => console.log(`[Bot] @${info.username} running.`),
   });
-}
+
 
 process.once("SIGINT", async () => { await pool.end(); process.exit(0); });
 process.once("SIGTERM", async () => { await pool.end(); process.exit(0); });
